@@ -70,7 +70,15 @@ var UserInterface = (function(){
       }
     },
     removeTask: (index) =>{$('.task-row').eq(index).remove();},
-    clearTasksWrapper: () =>{$('.tasks-wrapper').empty()}
+    clearTasksWrapper: () =>{$('.tasks-wrapper').empty()},
+    sortingAppliedIndicator: (element,sort_index) => {
+      if(sort_index == 1 || sort_index == 2){
+        $(element).css({'backgroundColor':'#7d7d7d'});
+      }
+      else{
+        $(element).css({'backgroundColor':'#494430'});
+      }
+    }
   }
 })();
 
@@ -175,12 +183,15 @@ var Controller = (function(ObjectManaging,UserInterface){
   $('.name').click(function(){
     sort_priority_index = 0;
     sort_done_index = 0;
+    UserInterface.sortingAppliedIndicator('.done',sort_done_index);
+    UserInterface.sortingAppliedIndicator('.priority',sort_priority_index);
     if(sort_name_index ==2){
       sort_name_index =0;
       UserInterface.clearTasksWrapper();
       UserInterface.addTasks(tasks,tasks.length);
       UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
       UserInterface.changeNextPageArrows();
+      UserInterface.sortingAppliedIndicator(this,sort_name_index);
       return;
     }
     sort_name_index++;
@@ -189,17 +200,21 @@ var Controller = (function(ObjectManaging,UserInterface){
     UserInterface.addTasks(sortedTasks,tasks.length);
     UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
     UserInterface.changeNextPageArrows();
+    UserInterface.sortingAppliedIndicator(this,sort_name_index);
   });
 
   $('.priority').click(function(){
     sort_name_index = 0;
     sort_done_index = 0;
+    UserInterface.sortingAppliedIndicator('.name',sort_name_index);
+    UserInterface.sortingAppliedIndicator('.done',sort_done_index);
     if(sort_priority_index ==2){
       sort_priority_index =0;
       UserInterface.clearTasksWrapper();
       UserInterface.addTasks(tasks,tasks.length);
       UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
       UserInterface.changeNextPageArrows();
+      UserInterface.sortingAppliedIndicator(this,sort_priority_index);
       return;
     }
     sort_priority_index++;
@@ -208,17 +223,21 @@ var Controller = (function(ObjectManaging,UserInterface){
     UserInterface.addTasks(sortedTasks,tasks.length);
     UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
     UserInterface.changeNextPageArrows();
+    UserInterface.sortingAppliedIndicator(this,sort_priority_index);
   });
 
   $('.done').click(function(){
     sort_name_index = 0;
     sort_priority_index = 0;
+    UserInterface.sortingAppliedIndicator('.name',sort_name_index);
+    UserInterface.sortingAppliedIndicator('.priority',sort_priority_index);
     if(sort_done_index ==2){
       sort_done_index =0;
       UserInterface.clearTasksWrapper();
       UserInterface.addTasks(tasks,tasks.length);
       UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
       UserInterface.changeNextPageArrows();
+      UserInterface.sortingAppliedIndicator('.done',sort_done_index);
       return;
     }
     sort_done_index++;
@@ -227,6 +246,7 @@ var Controller = (function(ObjectManaging,UserInterface){
     UserInterface.addTasks(sortedTasks,tasks.length);
     UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
     UserInterface.changeNextPageArrows();
+    UserInterface.sortingAppliedIndicator('.done',sort_done_index);
   });
 
   $('.tasks-wrapper').on('change','#done-checkbox',function(){

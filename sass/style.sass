@@ -7,6 +7,20 @@
 @media only screen and (max-width: 550px)
   \:root
     font-size: 10px
+@-webit-keyframes task_animation
+  0%
+    transform: translateY(-60%)
+    opacity: 0
+  100%
+    transform: translateY(0%)
+    opacity: 1
+@keyframes task_animation
+  0%
+    transform: translateY(-60%)
+    opacity: 0
+  100%
+    transform: translateY(0%)
+    opacity: 1
 *
   box-sizing: border-box
   font-family: Georgia
@@ -53,6 +67,8 @@ body
         left: 82%
   .tasks-wrapper
     height: 30vh
+    -webkit-transition: height 1s
+    transition: height 1s
     @media only screen and (max-height: 740px)
       height: 55vh
     .task-row
@@ -63,6 +79,17 @@ body
       border: 1px solid #d1d1d1
       border-top: none
       color: #494949
+      -webkit-animation:
+        name: task_animation
+        duration: 500ms
+        timing-function: ease-in-out
+      animation:
+        name: task_animation
+        duration: 500ms
+        timing-function: ease-in-out
+      &:hover .delete-icon
+        left: 54%
+        opacity: 1
       @media only screen and (max-height: 740px)
         height: 11vh
       .task-name, .delete-icon, .task-priority, .task-done
@@ -75,9 +102,21 @@ body
       .delete-icon
         height: 30%
         width: 5%
-        left: 50%
-        fill: red
+        left: 60%
         cursor: pointer
+        opacity: 0
+        -webkit-transition: left 300ms, opacity 300ms
+        -webkit-transition-timing-function: ease-out
+        transition: left 300ms, opacity 300ms
+        transition-timing-function: ease-out
+        &:active
+          fill: red
+        @media only screen and (max-width: 1024px)
+          opacity: 1
+          left: 54%
+        @media only screen and (max-width: 400px)
+          height: 50%
+          width: 10%
       .task-priority
         left: 62%
       .task-done
@@ -98,7 +137,7 @@ body
               border-radius: 2px
               position: absolute
               content: ""
-              top: -1.2rem
+              top: -1.25rem
 
             &::after
               display: inline-block
@@ -109,7 +148,7 @@ body
               transform: rotate(-45deg)
               position: absolute
               left: 0.3rem
-              top: -0.8rem
+              top: -0.85rem
               content: none
 
         input:checked + span::after

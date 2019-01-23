@@ -7,6 +7,20 @@
 @media only screen and (max-width: 550px) {
   :root {
     font-size: 10px; } }
+@-webit-keyframes task_animation {
+  0% {
+    transform: translateY(-60%);
+    opacity: 0; }
+  100% {
+    transform: translateY(0%);
+    opacity: 1; } }
+@keyframes task_animation {
+  0% {
+    transform: translateY(-60%);
+    opacity: 0; }
+  100% {
+    transform: translateY(0%);
+    opacity: 1; } }
 * {
   box-sizing: border-box;
   font-family: Georgia;
@@ -55,7 +69,9 @@ body {
       .container .inner-container .heading-row .done {
         left: 82%; }
   .container .tasks-wrapper {
-    height: 30vh; }
+    height: 30vh;
+    -webkit-transition: height 1s;
+    transition: height 1s; }
     @media only screen and (max-height: 740px) {
       .container .tasks-wrapper {
         height: 55vh; } }
@@ -66,7 +82,16 @@ body {
       background-color: #fff;
       border: 1px solid #d1d1d1;
       border-top: none;
-      color: #494949; }
+      color: #494949;
+      -webkit-animation-name: task_animation;
+      -webkit-animation-duration: 500ms;
+      -webkit-animation-timing-function: ease-in-out;
+      animation-name: task_animation;
+      animation-duration: 500ms;
+      animation-timing-function: ease-in-out; }
+      .container .tasks-wrapper .task-row:hover .delete-icon {
+        left: 54%;
+        opacity: 1; }
       @media only screen and (max-height: 740px) {
         .container .tasks-wrapper .task-row {
           height: 11vh; } }
@@ -80,9 +105,23 @@ body {
       .container .tasks-wrapper .task-row .delete-icon {
         height: 30%;
         width: 5%;
-        left: 50%;
-        fill: red;
-        cursor: pointer; }
+        left: 60%;
+        cursor: pointer;
+        opacity: 0;
+        -webkit-transition: left 300ms, opacity 300ms;
+        -webkit-transition-timing-function: ease-out;
+        transition: left 300ms, opacity 300ms;
+        transition-timing-function: ease-out; }
+        .container .tasks-wrapper .task-row .delete-icon:active {
+          fill: red; }
+        @media only screen and (max-width: 1024px) {
+          .container .tasks-wrapper .task-row .delete-icon {
+            opacity: 1;
+            left: 54%; } }
+        @media only screen and (max-width: 400px) {
+          .container .tasks-wrapper .task-row .delete-icon {
+            height: 50%;
+            width: 10%; } }
       .container .tasks-wrapper .task-row .task-priority {
         left: 62%; }
       .container .tasks-wrapper .task-row .task-done {
@@ -103,7 +142,7 @@ body {
               border-radius: 2px;
               position: absolute;
               content: "";
-              top: -1.2rem; }
+              top: -1.25rem; }
             .container .tasks-wrapper .task-row .task-done .custom-checkbox span::after {
               display: inline-block;
               border-bottom: 2px solid white;
@@ -113,7 +152,7 @@ body {
               transform: rotate(-45deg);
               position: absolute;
               left: 0.3rem;
-              top: -0.8rem;
+              top: -0.85rem;
               content: none; }
         .container .tasks-wrapper .task-row .task-done input:checked + span::after {
           content: ""; }
