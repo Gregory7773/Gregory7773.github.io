@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+  <head>
+    <title>To-Do List</title>
+    <meta charset = "UTF-8">
+    <meta name="viewport" content = "width=device-width, initial-scale = 1.0">
+    <meta name = "keywords" content = "tasks,list,plan,daily,agenda">
+    <link rel="stylesheet" href= "css/style.css">
+    <script
+    src="https://code.jquery.com/jquery-3.3.1.min.js"
+    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <div class = "container">
+      <div class = "inner-container">
+        <div class = "heading-row">
+          <h1 class = "name">Task name</h1>
+          <h2 class = "priority">Priority</h2>
+          <h2 class = "done">Done</h2>
+        </div>
+        <div class="tasks-wrapper">
+
+        </div>
+
+        <div class = "footer-row">
+          <svg class = "add-rows" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.5 0c6.347 0 11.5 5.153 11.5 11.5s-5.153 11.5-11.5 11.5-11.5-5.153-11.5-11.5 5.153-11.5 11.5-11.5zm0 1c5.795 0 10.5 4.705 10.5 10.5s-4.705 10.5-10.5 10.5-10.5-4.705-10.5-10.5 4.705-10.5 10.5-10.5zm.5 10h6v1h-6v6h-1v-6h-6v-1h6v-6h1v6z"/></svg>
+          <div class = "select-rows-amount">
+            <select name="rows-per-page">
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+            </select>
+          </div>
+          <div class = "visible-rows">1-5 of 11</div>
+          <i class = "arrow left"></i>
+          <i class = "arrow right"></i>
+        </div>
+        <div class = "add-rows-form">
+          sdfsdf<input type = "text" name = 'task-name'>
+          sdfsdf<select name = 'task-priority'>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+          </select>
+          <button type='button' name = 'add-task-button'>Add task</button>
+        </div>
+      </div>
+    </div>
+    <script src = "javascript/main.js"></script>
+  </body>
+</html>

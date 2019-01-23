@@ -1,0 +1,215 @@
+
+\:root
+  font-size: 17px
+@media only screen and (max-width: 900px)
+  \:root
+    font-size: 15px
+@media only screen and (max-width: 550px)
+  \:root
+    font-size: 10px
+*
+  box-sizing: border-box
+  font-family: Georgia
+  font-weight: 100
+  font-size: 1rem
+
+body
+  margin: 0
+  user-select: none
+.container
+  width: 80%
+  background-color: #eeeeee
+  margin: 0 auto
+  margin-top: 2vh
+  @media only screen and (max-width: 1400px)
+    width: 100%
+  .inner-container
+    padding: 0.7vh
+    position: relative
+    .heading-row
+      width: 100%
+      background-color: #494430
+      border: 1px solid #d1d1d1
+      position: relative
+      height: 7vh
+      @media only screen and (max-height: 740px)
+        height: 12vh
+      h1, h2
+        display: flex
+        align-items: center
+        font-size: 1rem
+        color: #f2f2f0
+        margin: 0
+        cursor: pointer
+        position: absolute
+        height: 100%
+        padding: 0 1vw
+        box-sizing: content-box
+      .name
+        left: 2%
+      .priority
+        left: 62%
+      .done
+        left: 82%
+  .tasks-wrapper
+    height: 30vh
+    @media only screen and (max-height: 740px)
+      height: 55vh
+    .task-row
+      position: relative
+      width: 100%
+      height: 6vh
+      background-color: #fff
+      border: 1px solid #d1d1d1
+      border-top: none
+      color: #494949
+      @media only screen and (max-height: 740px)
+        height: 11vh
+      .task-name, .delete-icon, .task-priority, .task-done
+        position: absolute
+        top: 50%
+        transform: translateY(-50%)
+        padding: 0 1vw
+      .task-name
+        left: 2%
+      .delete-icon
+        height: 30%
+        width: 5%
+        left: 50%
+        fill: red
+        cursor: pointer
+      .task-priority
+        left: 62%
+      .task-done
+        left: 82%
+        transform: translateY(-50%)
+        .custom-checkbox
+          position: relative
+          input
+            opacity: 0
+          span
+            display: block
+            cursor: pointer
+            &::before
+              display: inline-block
+              height: 1.25rem
+              width: 1.25rem
+              border: 1px solid #a7a7a7
+              border-radius: 2px
+              position: absolute
+              content: ""
+              top: -1.2rem
+
+            &::after
+              display: inline-block
+              border-bottom: 2px solid white
+              border-left: 2px solid white
+              height: 0.3rem
+              width: 0.7rem
+              transform: rotate(-45deg)
+              position: absolute
+              left: 0.3rem
+              top: -0.8rem
+              content: none
+
+        input:checked + span::after
+          content: ""
+        input:checked + span::before
+          background-color: #f69a2f
+          border-color: #f69a2f
+  .footer-row
+    height: 7.5vh
+    width: 100%
+    background-color: #fff
+    border: 1px solid #d1d1d1
+    border-top: none
+    position: relative
+    color: #494949
+    @media only screen and (max-height: 740px)
+      height: 12.5vh
+    .select-rows-amount, .visible-rows, .arrow, .add-rows
+      position: absolute
+      top: 50%
+      transform: translateY(-50%)
+    .add-rows
+      left: 50%
+      cursor: pointer
+      &:active
+        fill: #f69a2f
+      @media only screen and (max-width: 740px)
+        left: 6%
+    .select-rows-amount
+      left: 61%
+      width: 25%
+      @media only screen and (max-width: 1400px)
+        left: 57%
+        width: 35%
+      @media only screen and (max-width: 740px)
+        left: 43%
+        width: 47%
+      @media only screen and (max-width: 400px)
+        left: 20%
+
+      select
+        border: none
+        padding-bottom: 3px
+        outline: none
+        cursor: pointer
+        width: 4rem
+
+    .select-rows-amount::before
+      content: "Rows per page:"
+      vertical-align: -2px
+      margin-right: 1vw
+    .visible-rows
+      left: 81%
+      @media only screen and (max-width: 740px)
+        left: 78%
+      @media only screen and (max-width: 400px)
+        left: 68%
+    .arrow
+      border: solid gray
+      border-width: 0 2px 2px 0
+      padding: 4px
+      cursor: pointer
+      @media only screen and (max-width: 740px)
+        padding: 3px
+    .left
+      left: 90%
+      transform: rotate(135deg) translateY(50%)
+      @media only screen and (max-width: 400px)
+        left: 88%
+
+    .right
+      left: 93%
+      transform: rotate(-45deg) translateY(-50%)
+      @media only screen and (max-width: 900px)
+        left: 96%
+  .add-rows-form
+    height: 10vh
+    width: 60%
+    background: #f1f1f1
+    border: 2px solid #a7a7a7
+    display: flex
+    flex-direction: row
+    justify-content: center
+    align-items: center
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translate(-50%,-50%)
+    visibility: hidden
+    @media only screen and (max-width: 740px)
+      width: 98%
+    input[name='task-name']
+      margin: 0 2rem 0 1rem
+      border: 1px solid #a7a7a7
+      width: 25%
+      @media only screen and (max-width: 400px)
+        margin: 0 0.3rem 0 0.3rem
+        width: 15%
+    select[name = 'task-priority']
+      margin: 0 1rem 0 1rem
+      border: 1px solid #a7a7a7
+      @media only screen and (max-width: 400px)
+        margin: 0 0.3rem 0 0.3rem
