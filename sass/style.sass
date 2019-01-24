@@ -115,7 +115,6 @@ body
           opacity: 1
           left: 54%
         @media only screen and (max-width: 400px)
-          height: 50%
           width: 10%
       .task-priority
         left: 62%
@@ -138,7 +137,8 @@ body
               position: absolute
               content: ""
               top: -1.25rem
-
+              @-moz-document url-prefix()
+                top: 0
             &::after
               display: inline-block
               border-bottom: 2px solid white
@@ -150,6 +150,8 @@ body
               left: 0.3rem
               top: -0.85rem
               content: none
+              @-moz-document url-prefix()
+                top: 0.4rem
 
         input:checked + span::after
           content: ""
@@ -166,11 +168,11 @@ body
     color: #494949
     @media only screen and (max-height: 740px)
       height: 12.5vh
-    .select-rows-amount, .visible-rows, .arrow, .add-rows
+    .select-rows-amount, .visible-rows, .arrow, .open-form
       position: absolute
       top: 50%
       transform: translateY(-50%)
-    .add-rows
+    .open-form
       left: 50%
       cursor: pointer
       &:active
@@ -224,31 +226,51 @@ body
       transform: rotate(-45deg) translateY(-50%)
       @media only screen and (max-width: 900px)
         left: 96%
-  .add-rows-form
+  .add-rows-form-container
     height: 10vh
     width: 60%
-    background: #f1f1f1
-    border: 2px solid #a7a7a7
-    display: flex
-    flex-direction: row
-    justify-content: center
-    align-items: center
+    background: #d8d8d8
+    border: 2px solid #505050
     position: absolute
     top: 50%
     left: 50%
     transform: translate(-50%,-50%)
+    opacity: 0
     visibility: hidden
+    -webkit-transition: opacity 500ms
+    transition: opacity 500ms
     @media only screen and (max-width: 740px)
-      width: 98%
-    input[name='task-name']
-      margin: 0 2rem 0 1rem
-      border: 1px solid #a7a7a7
-      width: 25%
-      @media only screen and (max-width: 400px)
-        margin: 0 0.3rem 0 0.3rem
-        width: 15%
-    select[name = 'task-priority']
-      margin: 0 1rem 0 1rem
-      border: 1px solid #a7a7a7
-      @media only screen and (max-width: 400px)
-        margin: 0 0.3rem 0 0.3rem
+      width: 90%
+    .add-rows-form
+      width: 100%
+      height: 100%
+      position: relative
+      display: flex
+      flex-direction: row
+      justify-content: center
+      align-items: center
+      input[name='task-name']
+        margin: 0 2rem 0 1rem
+        border: 1px solid #a7a7a7
+        width: 25%
+        @media only screen and (max-width: 400px)
+          margin: 0 0.3rem 0 0.3rem
+          width: 15%
+      select[name = 'task-priority']
+        margin: 0 1rem 0 1rem
+        border: 1px solid #a7a7a7
+        cursor: pointer
+        @media only screen and (max-width: 400px)
+          margin: 0 0.3rem 0 0.3rem
+      button[name='add-task-button']
+        background-color: #fff
+        border: none
+        box-shadow: 2px 1px 4px
+        cursor: pointer
+      .close-form
+        height: 1.5rem
+        width: 1.5rem
+        position: absolute
+        right: -2.3%
+        top: -24%
+        cursor: pointer

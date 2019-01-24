@@ -3,12 +3,17 @@
 $(document).ready(function(){
 
 
-
+//global variables
 var tasks = [];
 var rows_per_page = 5;
+//index of first row on page, it's used in page changing
 var element_index_on_first_row = 0;
 var element_index_on_last_row = rows_per_page;
-
+/*sorting indexes used to check how many times headers have been clicked
+if 0 => sorting not applied
+   1 => sort ascending
+   2 => sort descending
+*/
 var sort_name_index = 0;
 var sort_priority_index = 0;
 var sort_done_index = 0;
@@ -61,6 +66,7 @@ var UserInterface = (function(){
         $('.right').css({"borderColor":"black"});
       }
     },
+    //set the tasks wrapper height when user selects number of rows per page
     setTaskWrapperHeight: (rows) =>{
       if($(window).height()>740){
         $('.tasks-wrapper').css({height:rows*6+'vh'});
@@ -71,13 +77,40 @@ var UserInterface = (function(){
     },
     removeTask: (index) =>{$('.task-row').eq(index).remove();},
     clearTasksWrapper: () =>{$('.tasks-wrapper').empty()},
+    //apply style on sorted headers
     sortingAppliedIndicator: (element,sort_index) => {
-      if(sort_index == 1 || sort_index == 2){
-        $(element).css({'backgroundColor':'#7d7d7d'});
-      }
-      else{
+      if(sort_index == 0){
         $(element).css({'backgroundColor':'#494430'});
       }
+      else{
+        $(element).css({'backgroundColor':'#7d7d7d'});
+      }
+    },
+    updateVisibleRowsSign: () =>{
+      var last_visible_row;
+      if(element_index_on_first_row+rows_per_page>tasks.length){
+        last_visible_row = element_index_on_first_row+(tasks.length%rows_per_page);
+      }
+      else{
+        last_visible_row = element_index_on_first_row+rows_per_page;
+      }
+      var html_string = (element_index_on_first_row+1)+'-'+last_visible_row+' of '+tasks.length;
+      $('.visible-rows').html(html_string);
+    },
+    getNameInput: () => {
+      return $("input[name='task-name']").val();
+    },
+    getPriorityInput: () => {
+      return $("select[name='task-priority']").val();
+    },
+    clearInput: () => {
+      $("input[name='task-name']").val('');
+    },
+    closeForm: () => {
+      $('.add-rows-form-container').css({'opacity':'0','visibility':'hidden'});
+    },
+    openForm:() =>{
+      $('.add-rows-form-container').css({'opacity':'1','visibility':'visible'});
     }
   }
 })();
@@ -110,11 +143,11 @@ var ObjectManaging = (function(){
     static compareByNumbers(mapProrities,way_of_sorting){
       if(way_of_sorting ==1){
         return function(a,b){
-          return(mapProrities[b.priority]-mapProrities[a.priority])
+          return(mapProrities[a.priority]-mapProrities[b.priority])
         }
       }
       return function(a,b){
-        return(mapProrities[a.priority]-mapProrities[b.priority])
+        return(mapProrities[b.priority]-mapProrities[a.priority])
     }
   }
     changeCheckBox(){
@@ -167,122 +200,116 @@ var ObjectManaging = (function(){
 
 
 
-var Controller = (function(ObjectManaging,UserInterface){
+var Controller = (function(ObjMan,UserInt){
 
+  //load initial methods
+  ObjMan.loadTasksFromStorage();
+  UserInt.addTasks(tasks,tasks.length);
+  UserInt.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
+  UserInt.changeNextPageArrows();
+  UserInt.updateVisibleRowsSign();
 
-  ObjectManaging.loadTasksFromStorage();
-  UserInterface.addTasks(tasks,tasks.length);
-  UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-  UserInterface.changeNextPageArrows();
+  //wrap repeating methods in functions
+  var userInterfaceSortingMethods = function(element,sorted_tasks,sort_index){
+    UserInt.clearTasksWrapper();
+    UserInt.addTasks(sorted_tasks,tasks.length);
+    UserInt.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
+    UserInt.changeNextPageArrows();
+    UserInt.sortingAppliedIndicator(element,sort_index);
+  };
 
+  var updateTasks_Range_Arrows = function(){
+    UserInt.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
+    UserInt.changeNextPageArrows();
+    UserInt.updateVisibleRowsSign();
+  };
 
-  $('.add-rows').click(function(){
-    $('.add-rows-form').css({'visibility':'visible'});
-  })
+  $('.open-form').click(function(){
+    UserInt.openForm();
+  });
 
+//sorting events
   $('.name').click(function(){
+    //cancel sorting on remaining columns
     sort_priority_index = 0;
     sort_done_index = 0;
-    UserInterface.sortingAppliedIndicator('.done',sort_done_index);
-    UserInterface.sortingAppliedIndicator('.priority',sort_priority_index);
+    UserInt.sortingAppliedIndicator('.done',sort_done_index);
+    UserInt.sortingAppliedIndicator('.priority',sort_priority_index);
     if(sort_name_index ==2){
       sort_name_index =0;
-      UserInterface.clearTasksWrapper();
-      UserInterface.addTasks(tasks,tasks.length);
-      UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-      UserInterface.changeNextPageArrows();
-      UserInterface.sortingAppliedIndicator(this,sort_name_index);
+      userInterfaceSortingMethods(this,tasks,sort_name_index);
       return;
     }
     sort_name_index++;
-    var sortedTasks = ObjectManaging.sortNameAndDone(this.className,sort_name_index);
-    UserInterface.clearTasksWrapper();
-    UserInterface.addTasks(sortedTasks,tasks.length);
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
-    UserInterface.sortingAppliedIndicator(this,sort_name_index);
+    var sortedTasks = ObjMan.sortNameAndDone(this.className,sort_name_index);
+    userInterfaceSortingMethods(this,sortedTasks,sort_name_index);
   });
 
   $('.priority').click(function(){
     sort_name_index = 0;
     sort_done_index = 0;
-    UserInterface.sortingAppliedIndicator('.name',sort_name_index);
-    UserInterface.sortingAppliedIndicator('.done',sort_done_index);
+    UserInt.sortingAppliedIndicator('.name',sort_name_index);
+    UserInt.sortingAppliedIndicator('.done',sort_done_index);
     if(sort_priority_index ==2){
       sort_priority_index =0;
-      UserInterface.clearTasksWrapper();
-      UserInterface.addTasks(tasks,tasks.length);
-      UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-      UserInterface.changeNextPageArrows();
-      UserInterface.sortingAppliedIndicator(this,sort_priority_index);
+      userInterfaceSortingMethods(this,tasks,sort_priority_index);
       return;
     }
     sort_priority_index++;
-    var sortedTasks = ObjectManaging.sortPriorities(sort_priority_index);
-    UserInterface.clearTasksWrapper();
-    UserInterface.addTasks(sortedTasks,tasks.length);
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
-    UserInterface.sortingAppliedIndicator(this,sort_priority_index);
+    var sortedTasks = ObjMan.sortPriorities(sort_priority_index);
+    userInterfaceSortingMethods(this,sortedTasks,sort_priority_index);
   });
 
   $('.done').click(function(){
     sort_name_index = 0;
     sort_priority_index = 0;
-    UserInterface.sortingAppliedIndicator('.name',sort_name_index);
-    UserInterface.sortingAppliedIndicator('.priority',sort_priority_index);
+    UserInt.sortingAppliedIndicator('.name',sort_name_index);
+    UserInt.sortingAppliedIndicator('.priority',sort_priority_index);
     if(sort_done_index ==2){
       sort_done_index =0;
-      UserInterface.clearTasksWrapper();
-      UserInterface.addTasks(tasks,tasks.length);
-      UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-      UserInterface.changeNextPageArrows();
-      UserInterface.sortingAppliedIndicator('.done',sort_done_index);
+      userInterfaceSortingMethods(this,tasks,sort_done_index);
       return;
     }
     sort_done_index++;
-    var sortedTasks = ObjectManaging.sortNameAndDone(this.className,sort_done_index);
-    UserInterface.clearTasksWrapper();
-    UserInterface.addTasks(sortedTasks,tasks.length);
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
-    UserInterface.sortingAppliedIndicator('.done',sort_done_index);
+    var sortedTasks = ObjMan.sortNameAndDone(this.className,sort_done_index);
+    userInterfaceSortingMethods(this,sortedTasks,sort_done_index);
   });
-
+  //change checkbox
   $('.tasks-wrapper').on('change','#done-checkbox',function(){
     var index = $(this).parents().eq(2).index();
-    ObjectManaging.changeCheckBoxValue(index);
-    ObjectManaging.updateStorage();
+    ObjMan.changeCheckBoxValue(index);
+    ObjMan.updateStorage();
 
   });
+  //delete task
   $('.tasks-wrapper').on('click','.delete-icon',function(){
     var index = $(this).parent().index();
-    ObjectManaging.removeTask(index);
-    ObjectManaging.updateStorage();
-    UserInterface.removeTask(index);
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
+    ObjMan.removeTask(index);
+    ObjMan.updateStorage();
+    UserInt.removeTask(index);
+    updateTasks_Range_Arrows();
   });
 
   $("button[name='add-task-button']").click(function(){
-    var name = $("input[name='task-name']").val();
-    var priority = $("select[name='task-priority']").val();
-    ObjectManaging.addTask(name,priority);
-    ObjectManaging.updateStorage();
-    UserInterface.addTasks(tasks);
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
-    $('.add-rows-form').css({'visibility':'hidden'});
+    if($('input[name="task-name"]').val() != ''){
+      var name = UserInt.getNameInput();
+      var priority = UserInt.getPriorityInput();
+      ObjMan.addTask(name,priority);
+      ObjMan.updateStorage();
+      UserInt.addTasks(tasks);
+      updateTasks_Range_Arrows();
+      UserInt.clearInput();
+      UserInt.closeForm();
+    }
   });
-
+  //change the page
   $(".right").click(function(){
     if(element_index_on_last_row >= tasks.length){
       return;
     }
     element_index_on_last_row += rows_per_page;
     element_index_on_first_row += rows_per_page;
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
+    updateTasks_Range_Arrows();
   });
 
   $(".left").click(function(){
@@ -291,24 +318,21 @@ var Controller = (function(ObjectManaging,UserInterface){
     }
     element_index_on_last_row -= rows_per_page;
     element_index_on_first_row -= rows_per_page;
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
+    updateTasks_Range_Arrows();
   });
 
   $("select[name='rows-per-page']").change(function(){
     rows_per_page = Number($("select[name='rows-per-page']").val());
     element_index_on_first_row = 0;
     element_index_on_last_row = rows_per_page;
-    UserInterface.updateVisibleTasks(element_index_on_first_row,element_index_on_last_row);
-    UserInterface.changeNextPageArrows();
-    UserInterface.setTaskWrapperHeight(rows_per_page);
+    UserInt.setTaskWrapperHeight(rows_per_page);
+    updateTasks_Range_Arrows();
   });
+  $('.close-form').click(function(){
+    UserInt.closeForm();
+  })
 
 
-
-return{
-
-}
 })(ObjectManaging,UserInterface);
 
 

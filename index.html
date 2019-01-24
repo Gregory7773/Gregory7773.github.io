@@ -28,7 +28,7 @@
         </div>
 
         <div class = "footer-row">
-          <svg class = "add-rows" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.5 0c6.347 0 11.5 5.153 11.5 11.5s-5.153 11.5-11.5 11.5-11.5-5.153-11.5-11.5 5.153-11.5 11.5-11.5zm0 1c5.795 0 10.5 4.705 10.5 10.5s-4.705 10.5-10.5 10.5-10.5-4.705-10.5-10.5 4.705-10.5 10.5-10.5zm.5 10h6v1h-6v6h-1v-6h-6v-1h6v-6h1v6z"/></svg>
+          <svg class = "open-form" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M11.5 0c6.347 0 11.5 5.153 11.5 11.5s-5.153 11.5-11.5 11.5-11.5-5.153-11.5-11.5 5.153-11.5 11.5-11.5zm0 1c5.795 0 10.5 4.705 10.5 10.5s-4.705 10.5-10.5 10.5-10.5-4.705-10.5-10.5 4.705-10.5 10.5-10.5zm.5 10h6v1h-6v6h-1v-6h-6v-1h6v-6h1v6z"/></svg>
           <div class = "select-rows-amount">
             <select name="rows-per-page">
               <option>5</option>
@@ -40,14 +40,17 @@
           <i class = "arrow left"></i>
           <i class = "arrow right"></i>
         </div>
-        <div class = "add-rows-form">
-          sdfsdf<input type = "text" name = 'task-name'>
-          sdfsdf<select name = 'task-priority'>
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-          </select>
-          <button type='button' name = 'add-task-button'>Add task</button>
+        <div class = "add-rows-form-container">
+          <div class = 'add-rows-form'>
+            Task<input type = "text" name = 'task-name'>
+            Priority<select name = 'task-priority'>
+              <option>Low</option>
+              <option>Medium</option>
+              <option>High</option>
+            </select>
+            <button type='button' name = 'add-task-button'>Add task</button>
+            <img class = 'close-form' src = 'images/close.png'>
+          </div>
         </div>
       </div>
     </div>
